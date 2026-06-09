@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Kentainers Africa"
+version = "1.0.0"
+id = "artifacts/kentainers-africa"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 26103
+
+[services.development]
+run = "pnpm --filter @workspace/kentainers-africa run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/kentainers-africa", "run", "build" ]
+publicDir = "artifacts/kentainers-africa/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "26103"
+BASE_PATH = "/"
