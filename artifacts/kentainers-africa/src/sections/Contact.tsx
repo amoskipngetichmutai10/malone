@@ -1,21 +1,40 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useScrollReveal } from '../hooks/useScrollReveal';
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle, Loader2, Globe } from 'lucide-react';
+import { Phone, Mail, Clock, Send, CheckCircle, Loader2, Globe, AlertCircle } from 'lucide-react';
+
+const PHONE = '+254 752 045 374';
+const EMAIL = 'mbakasmartcollections@gmail.com';
+const WA_NUMBER = '254752045374';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', country: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const sectionRef = useScrollReveal(0.1);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const { error } = supabase
-      ? await supabase.from('contact_submissions').insert([formData])
-      : { error: null };
-    if (!error) {
+    setError(null);
+
+    if (!supabase) {
+      const waText = encodeURIComponent(
+        `Hello Kentainers East Africa!\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nCountry: ${formData.country}\n\nMessage:\n${formData.message}`
+      );
+      window.open(`https://wa.me/${WA_NUMBER}?text=${waText}`, '_blank');
+      setIsSubmitting(false);
+      setSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', country: '', message: '' });
+      return;
+    }
+
+    const { error: dbError } = await supabase.from('contact_submissions').insert([formData]);
+
+    if (dbError) {
+      setError('Something went wrong. Please reach us directly via WhatsApp or email below.');
+    } else {
       setSubmitted(true);
       setFormData({ name: '', email: '', phone: '', country: '', message: '' });
     }
@@ -36,22 +55,51 @@ export default function Contact() {
         <div className="grid lg:grid-cols-2 gap-16">
           <div className="reveal-left">
             <div className="grid sm:grid-cols-2 gap-6 mb-10">
-              {[
-                { icon: MapPin, title: 'Visit Us', lines: ['Nairobi, Kenya', 'East Africa HQ'] },
-                { icon: Phone, title: 'Call Us', lines: ['+254 700 000 000', '+254 711 111 111'] },
-                { icon: Mail, title: 'Email Us', lines: ['info@aquasecure.co.ke', 'sales@aquasecure.co.ke'] },
-                { icon: Clock, title: 'Working Hours', lines: ['Mon - Fri: 8AM - 6PM', 'Sat: 9AM - 2PM'] },
-              ].map((item) => (
-                <div key={item.title} className="bg-brand-cream rounded-2xl p-6 border border-brand-earth-200">
-                  <div className="w-12 h-12 rounded-xl bg-brand-green-100 flex items-center justify-center mb-4">
-                    <item.icon className="w-6 h-6 text-brand-green-700" />
-                  </div>
-                  <h3 className="font-semibold text-brand-dark mb-2">{item.title}</h3>
-                  {item.lines.map((line) => (
-                    <p key={line} className="text-brand-stone text-sm">{line}</p>
-                  ))}
+              <div className="bg-brand-cream rounded-2xl p-6 border border-brand-earth-200">
+                <div className="w-12 h-12 rounded-xl bg-[#25D366]/15 flex items-center justify-center mb-4">
+                  <svg viewBox="0 0 24 24" fill="#25D366" className="w-6 h-6">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
                 </div>
-              ))}
+                <h3 className="font-semibold text-brand-dark mb-2">WhatsApp</h3>
+                <a
+                  href={`https://wa.me/${WA_NUMBER}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-stone text-sm hover:text-[#25D366] transition-colors"
+                >
+                  {PHONE}
+                </a>
+              </div>
+
+              <div className="bg-brand-cream rounded-2xl p-6 border border-brand-earth-200">
+                <div className="w-12 h-12 rounded-xl bg-brand-green-100 flex items-center justify-center mb-4">
+                  <Phone className="w-6 h-6 text-brand-green-700" />
+                </div>
+                <h3 className="font-semibold text-brand-dark mb-2">Call Us</h3>
+                <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="text-brand-stone text-sm hover:text-brand-green-700 transition-colors">
+                  {PHONE}
+                </a>
+              </div>
+
+              <div className="bg-brand-cream rounded-2xl p-6 border border-brand-earth-200">
+                <div className="w-12 h-12 rounded-xl bg-brand-green-100 flex items-center justify-center mb-4">
+                  <Mail className="w-6 h-6 text-brand-green-700" />
+                </div>
+                <h3 className="font-semibold text-brand-dark mb-2">Email Us</h3>
+                <a href={`mailto:${EMAIL}`} className="text-brand-stone text-sm hover:text-brand-green-700 transition-colors break-all">
+                  {EMAIL}
+                </a>
+              </div>
+
+              <div className="bg-brand-cream rounded-2xl p-6 border border-brand-earth-200">
+                <div className="w-12 h-12 rounded-xl bg-brand-green-100 flex items-center justify-center mb-4">
+                  <Clock className="w-6 h-6 text-brand-green-700" />
+                </div>
+                <h3 className="font-semibold text-brand-dark mb-2">Working Hours</h3>
+                <p className="text-brand-stone text-sm">Mon - Fri: 8AM - 6PM</p>
+                <p className="text-brand-stone text-sm">Sat: 9AM - 2PM</p>
+              </div>
             </div>
 
             <div className="bg-brand-green-50 rounded-2xl p-6 border border-brand-green-200">
@@ -64,19 +112,6 @@ export default function Contact() {
                 DRC, Malawi, Zambia, Zimbabwe, Mozambique, and Madagascar.
               </p>
             </div>
-
-            <div className="rounded-2xl overflow-hidden h-72 mt-6 bg-brand-earth-100 border border-brand-earth-200">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255281.19891906806!2d36.68258735!3d-1.3028611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1172d84d49a7%3A0xf7cf0254b297924c!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Office Location"
-              />
-            </div>
           </div>
 
           <div className="reveal-right bg-brand-cream rounded-2xl p-8 sm:p-10 border border-brand-earth-200">
@@ -86,9 +121,11 @@ export default function Contact() {
                   <CheckCircle className="w-8 h-8 text-brand-green-700" />
                 </div>
                 <h3 className="text-2xl font-bold text-brand-dark mb-2">Message Sent!</h3>
-                <p className="text-brand-stone mb-6">Thank you for reaching out. We will get back to you within 24 hours.</p>
+                <p className="text-brand-stone mb-6">
+                  Thank you for reaching out. We will get back to you within 24 hours.
+                </p>
                 <button
-                  onClick={() => setSubmitted(false)}
+                  onClick={() => { setSubmitted(false); setError(null); }}
                   className="text-brand-green-700 font-semibold hover:text-brand-green-800"
                 >
                   Send another message
@@ -96,6 +133,34 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
+                    <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-red-700 text-sm font-medium">{error}</p>
+                      <div className="flex gap-4 mt-2">
+                        <a href={`https://wa.me/${WA_NUMBER}`} target="_blank" rel="noopener noreferrer" className="text-[#25D366] text-sm font-semibold hover:underline">
+                          WhatsApp
+                        </a>
+                        <a href={`mailto:${EMAIL}`} className="text-brand-green-700 text-sm font-semibold hover:underline">
+                          Email
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {!supabase && (
+                  <div className="flex items-start gap-3 bg-brand-green-50 border border-brand-green-200 rounded-xl p-4">
+                    <svg viewBox="0 0 24 24" fill="#25D366" className="w-5 h-5 shrink-0 mt-0.5">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    <p className="text-brand-green-800 text-sm">
+                      Submitting this form will open <strong>WhatsApp</strong> with your message pre-filled — the fastest way to reach us!
+                    </p>
+                  </div>
+                )}
+
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-brand-dark mb-2">Full Name *</label>
@@ -128,7 +193,7 @@ export default function Contact() {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-brand-earth-200 focus:border-brand-green-500 focus:ring-2 focus:ring-brand-green-200 outline-none transition-all bg-white"
-                      placeholder="+254 700 000 000"
+                      placeholder="+254 752 045 374"
                     />
                   </div>
                   <div>
@@ -166,7 +231,7 @@ export default function Contact() {
                   ) : (
                     <>
                       <Send className="w-5 h-5" />
-                      Send Message
+                      {supabase ? 'Send Message' : 'Send via WhatsApp'}
                     </>
                   )}
                 </button>
