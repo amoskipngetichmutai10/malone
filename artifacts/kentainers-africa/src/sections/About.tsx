@@ -36,7 +36,7 @@ export default function About() {
   return (
     <section id="about" className="py-24 bg-brand-cream">
       <div ref={sectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+        <div className="grid lg:grid-cols-1 gap-16 items-center mb-20">
           <div className="reveal-left">
             <span className="text-brand-green-700 font-semibold text-sm uppercase tracking-wider">About Us</span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-dark mt-3 mb-6 leading-tight">
@@ -64,25 +64,6 @@ export default function About() {
                 <Eye className="w-5 h-5 text-brand-earth-600" />
                 <span className="text-brand-earth-700 font-medium text-sm">Future-Focused</span>
               </div>
-            </div>
-          </div>
-
-          <div className="reveal-right relative">
-            <div className="grid grid-cols-2 gap-4">
-              <img
-                src="https://images.pexels.com/photos/260254/pexels-photo-260254.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Water tank installation"
-                className="rounded-2xl shadow-lg object-cover h-64 w-full"
-              />
-              <img
-                src="https://images.pexels.com/photos/221085/pexels-photo-221085.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Chainlink fencing"
-                className="rounded-2xl shadow-lg object-cover h-64 w-full mt-10"
-              />
-            </div>
-            <div className="absolute -bottom-6 -left-6 bg-brand-green-700 text-white p-6 rounded-2xl shadow-xl">
-              <p className="text-4xl font-bold">21</p>
-              <p className="text-brand-green-100 text-sm">Years of Excellence</p>
             </div>
           </div>
         </div>
