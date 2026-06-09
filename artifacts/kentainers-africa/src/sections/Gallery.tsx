@@ -95,6 +95,45 @@ const STATIC_VIDEOS: GalleryItem[] = [
   },
 ];
 
+const STATIC_IMAGES: GalleryItem[] = [
+  {
+    id: 'cli1', title: 'Galvanized Chainlink Rolls', category: 'chainlink_fencing', media_type: 'image',
+    url: '/chainlink/cl-img1.jpeg', thumbnail_url: '/chainlink/cl-img1.jpeg',
+  },
+  {
+    id: 'cli2', title: 'Heavy Duty Chainlink Roll', category: 'chainlink_fencing', media_type: 'image',
+    url: '/chainlink/cl-img2.jpeg', thumbnail_url: '/chainlink/cl-img2.jpeg',
+  },
+  {
+    id: 'cli3', title: 'Hexagonal Wire Mesh', category: 'chainlink_fencing', media_type: 'image',
+    url: '/chainlink/cl-img3.jpeg', thumbnail_url: '/chainlink/cl-img3.jpeg',
+  },
+  {
+    id: 'cli4', title: 'Chicken Wire Mesh', category: 'chainlink_fencing', media_type: 'image',
+    url: '/chainlink/cl-img4.jpeg', thumbnail_url: '/chainlink/cl-img4.jpeg',
+  },
+  {
+    id: 'cli5', title: 'Close-Knit Security Mesh', category: 'chainlink_fencing', media_type: 'image',
+    url: '/chainlink/cl-img5.jpeg', thumbnail_url: '/chainlink/cl-img5.jpeg',
+  },
+  {
+    id: 'cli6', title: 'Standard Chainlink Stock', category: 'chainlink_fencing', media_type: 'image',
+    url: '/chainlink/cl-img6.jpeg', thumbnail_url: '/chainlink/cl-img6.jpeg',
+  },
+  {
+    id: 'cli7', title: 'Bulk Chainlink Inventory', category: 'chainlink_fencing', media_type: 'image',
+    url: '/chainlink/cl-img7.jpeg', thumbnail_url: '/chainlink/cl-img7.jpeg',
+  },
+  {
+    id: 'cli8', title: 'PVC Coated Coloured Chainlink', category: 'chainlink_fencing', media_type: 'image',
+    url: '/chainlink/cl-img8.jpeg', thumbnail_url: '/chainlink/cl-img8.jpeg',
+  },
+  {
+    id: 'cli9', title: 'Kukunet Hexagonal Wire — 30m Roll', category: 'chainlink_fencing', media_type: 'image',
+    url: '/chainlink/cl-img9.jpeg', thumbnail_url: '/chainlink/cl-img9.jpeg',
+  },
+];
+
 export default function Gallery() {
   const [dbItems, setDbItems] = useState<GalleryItem[]>([]);
   const [category, setCategory] = useState<'water_tanks' | 'chainlink_fencing'>('water_tanks');
@@ -112,7 +151,7 @@ export default function Gallery() {
     fetchGallery();
   }, []);
 
-  const allItems = [...STATIC_VIDEOS, ...dbItems];
+  const allItems = [...STATIC_VIDEOS, ...STATIC_IMAGES, ...dbItems];
 
   const filtered = allItems.filter(
     (item) => item.category === category && item.media_type === (subTab === 'images' ? 'image' : 'video')
@@ -182,6 +221,9 @@ export default function Gallery() {
             >
               <ImageIcon className="w-4 h-4" />
               Images
+              {subTab === 'images' && filtered.length > 0 && (
+                <span className="bg-white/20 text-white text-xs px-1.5 py-0.5 rounded-full">{filtered.length}</span>
+              )}
             </button>
             <button
               onClick={() => setSubTab('videos')}
@@ -191,7 +233,7 @@ export default function Gallery() {
             >
               <Film className="w-4 h-4" />
               Videos
-              {filtered.length > 0 && subTab === 'videos' && (
+              {subTab === 'videos' && filtered.length > 0 && (
                 <span className="bg-white/20 text-white text-xs px-1.5 py-0.5 rounded-full">{filtered.length}</span>
               )}
             </button>
@@ -221,7 +263,6 @@ export default function Gallery() {
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
           onClick={() => setLightbox(null)}
         >
-          {/* Close */}
           <button
             onClick={() => setLightbox(null)}
             className="absolute top-5 right-5 w-10 h-10 bg-white/10 hover:bg-white/25 rounded-full flex items-center justify-center text-white transition-colors z-10"
@@ -229,7 +270,6 @@ export default function Gallery() {
             <X className="w-5 h-5" />
           </button>
 
-          {/* Prev */}
           {filtered.length > 1 && (
             <button
               onClick={(e) => { e.stopPropagation(); navigate(-1); }}
@@ -239,7 +279,6 @@ export default function Gallery() {
             </button>
           )}
 
-          {/* Next */}
           {filtered.length > 1 && (
             <button
               onClick={(e) => { e.stopPropagation(); navigate(1); }}
@@ -288,7 +327,6 @@ function VideoCard({ item, onClick }: { item: GalleryItem; onClick: () => void }
       onClick={onClick}
       className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 text-left w-full"
     >
-      {/* Thumbnail */}
       <div className="relative aspect-video overflow-hidden bg-brand-earth-100">
         <img
           src={thumb}
@@ -297,10 +335,8 @@ function VideoCard({ item, onClick }: { item: GalleryItem; onClick: () => void }
           loading="lazy"
         />
 
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-        {/* Play button */}
         {item.media_type === 'video' && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/60 flex items-center justify-center group-hover:bg-brand-green-600/80 group-hover:border-brand-green-400 transition-all duration-300 shadow-lg">
@@ -309,7 +345,6 @@ function VideoCard({ item, onClick }: { item: GalleryItem; onClick: () => void }
           </div>
         )}
 
-        {/* Video badge */}
         {item.media_type === 'video' && (
           <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white text-xs font-semibold px-2.5 py-1 rounded-full">
             <Film className="w-3 h-3" />
@@ -318,7 +353,6 @@ function VideoCard({ item, onClick }: { item: GalleryItem; onClick: () => void }
         )}
       </div>
 
-      {/* Label */}
       <div className="px-4 py-3">
         <p className="font-semibold text-brand-dark text-sm truncate group-hover:text-brand-green-700 transition-colors">
           {item.title}

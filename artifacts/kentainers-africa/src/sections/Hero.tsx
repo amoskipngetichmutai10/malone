@@ -3,19 +3,28 @@ import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 
 const slides = [
   {
-    image: 'https://images.pexels.com/photos/260254/pexels-photo-260254.jpeg?auto=compress&cs=tinysrgb&w=1920',
+    image: 'https://res.cloudinary.com/dvru78pi3/video/upload/so_2,w_1920,h_1080,c_fill/v1780963546/wt4_zw0nrt.jpg',
     headline: 'Premium Water Tanks for Every Need',
-    subheadline: 'Durable, high-capacity water storage solutions serving communities across 27+ countries.',
+    subheadline: 'Durable, high-capacity water storage solutions serving homes, schools, and communities across East Africa.',
+    badge: 'Water Storage Solutions',
   },
   {
-    image: 'https://images.pexels.com/photos/221085/pexels-photo-221085.jpeg?auto=compress&cs=tinysrgb&w=1920',
+    image: 'https://res.cloudinary.com/dvru78pi3/video/upload/so_2,w_1920,h_1080,c_fill/v1780967856/cl1_apyb4m.jpg',
     headline: 'Chainlink Fencing That Lasts',
-    subheadline: 'Industrial-grade security fencing protecting schools, farms, and businesses across East Africa.',
+    subheadline: 'Industrial-grade galvanized chainlink protecting farms, schools, factories, and estates across East Africa.',
+    badge: 'Security Fencing',
   },
   {
-    image: 'https://images.pexels.com/photos/416528/pexels-photo-416528.jpeg?auto=compress&cs=tinysrgb&w=1920',
-    headline: '21 Years of Trust & Excellence',
-    subheadline: 'Supplying East Africa\'s water and security needs with dedication, quality, and heart.',
+    image: 'https://res.cloudinary.com/dvru78pi3/video/upload/so_2,w_1920,h_1080,c_fill/v1780963671/wt9_yc1ecp.jpg',
+    headline: 'Serving Communities for Over 21 Years',
+    subheadline: 'Trusted supplier delivering water security and perimeter protection to over 27 countries across Africa.',
+    badge: '21 Years of Excellence',
+  },
+  {
+    image: 'https://res.cloudinary.com/dvru78pi3/video/upload/so_2,w_1920,h_1080,c_fill/v1780967720/cl3_rjuu8o.jpg',
+    headline: 'Complete Perimeter Security',
+    subheadline: 'From chainlink mesh to barbed wire and fence posts — we supply everything you need for a secure boundary.',
+    badge: 'Full Installation Solutions',
   },
 ];
 
@@ -43,19 +52,16 @@ export default function Hero() {
           className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? 'opacity-100' : 'opacity-0'}`}
         >
           <img src={slide.image} alt={slide.headline} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/80 via-brand-dark/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/85 via-brand-dark/55 to-transparent" />
         </div>
       ))}
 
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
-            <div
-              key={current}
-              className="animate-fade-in-up"
-            >
+            <div key={current} className="animate-fade-in-up">
               <span className="inline-block bg-brand-green-600/20 text-brand-green-300 px-4 py-1.5 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-brand-green-500/30">
-                Supplying East Africa's Water & Security Needs for 21 Years
+                {slides[current].badge}
               </span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                 {slides[current].headline}
@@ -95,7 +101,7 @@ export default function Hero() {
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              className={`w-3 h-3 rounded-full transition-all ${i === current ? 'bg-brand-green-400 w-8' : 'bg-white/40 hover:bg-white/60'}`}
+              className={`h-3 rounded-full transition-all ${i === current ? 'bg-brand-green-400 w-8' : 'bg-white/40 hover:bg-white/60 w-3'}`}
             />
           ))}
         </div>

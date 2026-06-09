@@ -6,6 +6,7 @@ import About from './sections/About';
 import Products from './sections/Products';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
+import WhatsApp from './components/WhatsApp';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <WhatsApp />
     </div>
   );
 }

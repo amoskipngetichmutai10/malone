@@ -12,6 +12,114 @@ interface Product {
   price_label: string | null;
 }
 
+function cloudinaryThumb(url: string) {
+  return url
+    .replace('/video/upload/', '/video/upload/so_0,w_600,h_400,c_fill/')
+    .replace(/\.mp4$/, '.jpg');
+}
+
+const STATIC_WATER_TANKS: Product[] = [
+  {
+    id: 'wtp1',
+    name: '500L Polyethylene Water Tank',
+    description: 'Compact and lightweight polyethylene tank ideal for household use, small gardens, and rural homesteads.',
+    category: 'water_tanks',
+    image_url: cloudinaryThumb('https://res.cloudinary.com/dvru78pi3/video/upload/v1780963554/wt1_ehrqxa.mp4'),
+    price_label: 'From KES 5,500',
+  },
+  {
+    id: 'wtp2',
+    name: '1,000L Water Storage Tank',
+    description: 'Mid-size polyethylene tank perfect for family homes and small businesses needing reliable water storage.',
+    category: 'water_tanks',
+    image_url: cloudinaryThumb('https://res.cloudinary.com/dvru78pi3/video/upload/v1780963622/wt3_cpf1no.mp4'),
+    price_label: 'From KES 9,800',
+  },
+  {
+    id: 'wtp3',
+    name: '2,000L Water Tank',
+    description: 'Popular mid-large tank for apartment buildings, schools, and offices across East Africa.',
+    category: 'water_tanks',
+    image_url: cloudinaryThumb('https://res.cloudinary.com/dvru78pi3/video/upload/v1780963548/wt5_uxp6ow.mp4'),
+    price_label: 'From KES 17,500',
+  },
+  {
+    id: 'wtp4',
+    name: '5,000L Commercial Tank',
+    description: 'Large-capacity tank for commercial properties, farms, and institutions requiring high-volume water storage.',
+    category: 'water_tanks',
+    image_url: cloudinaryThumb('https://res.cloudinary.com/dvru78pi3/video/upload/v1780963700/wt7_uzrrow.mp4'),
+    price_label: 'From KES 38,000',
+  },
+  {
+    id: 'wtp5',
+    name: '10,000L Industrial Tank',
+    description: 'Heavy-duty industrial-grade tank for factories, hotels, and large construction sites.',
+    category: 'water_tanks',
+    image_url: cloudinaryThumb('https://res.cloudinary.com/dvru78pi3/video/upload/v1780963671/wt9_yc1ecp.mp4'),
+    price_label: 'From KES 72,000',
+  },
+  {
+    id: 'wtp6',
+    name: '20,000L Water Reservoir',
+    description: 'Ultra-large reservoir tank for community water projects, NGOs, and government water supply programmes.',
+    category: 'water_tanks',
+    image_url: cloudinaryThumb('https://res.cloudinary.com/dvru78pi3/video/upload/v1780963579/wt8_eosqi0.mp4'),
+    price_label: 'Get a Quote',
+  },
+];
+
+const STATIC_CHAINLINK: Product[] = [
+  {
+    id: 'clp1',
+    name: 'Galvanized Chainlink — 3ft',
+    description: 'Standard galvanized chainlink fencing, 3ft high. Ideal for garden boundaries, poultry runs, and light security.',
+    category: 'chainlink_fencing',
+    image_url: '/chainlink/cl-img1.jpeg',
+    price_label: 'Per Roll',
+  },
+  {
+    id: 'clp2',
+    name: 'Heavy Duty Chainlink — 6ft',
+    description: 'Industrial-grade galvanized 6ft chainlink for schools, factories, estates, and perimeter security fencing.',
+    category: 'chainlink_fencing',
+    image_url: '/chainlink/cl-img2.jpeg',
+    price_label: 'Per Roll',
+  },
+  {
+    id: 'clp3',
+    name: 'PVC Coated Chainlink',
+    description: 'Colour-coated chainlink (green, black, yellow) for decorative yet durable perimeter fencing solutions.',
+    category: 'chainlink_fencing',
+    image_url: '/chainlink/cl-img8.jpeg',
+    price_label: 'Per Roll',
+  },
+  {
+    id: 'clp4',
+    name: 'Hexagonal Wire Mesh',
+    description: 'Flexible hexagonal wire mesh for poultry farms, garden netting, and gabion basket filling.',
+    category: 'chainlink_fencing',
+    image_url: '/chainlink/cl-img3.jpeg',
+    price_label: 'Per Roll',
+  },
+  {
+    id: 'clp5',
+    name: 'Chicken Wire (Kukunet)',
+    description: 'Premium galvanized Kukunet hexagonal wire mesh, 30m rolls. Ideal for chicken coops, farms, and small animal enclosures.',
+    category: 'chainlink_fencing',
+    image_url: '/chainlink/cl-img9.jpeg',
+    price_label: 'Per Roll',
+  },
+  {
+    id: 'clp6',
+    name: 'Bulk Chainlink Supply',
+    description: 'Wholesale bulk rolls of galvanized chainlink for large-scale projects, contractors, and resellers across East Africa.',
+    category: 'chainlink_fencing',
+    image_url: '/chainlink/cl-img7.jpeg',
+    price_label: 'Bulk Pricing',
+  },
+];
+
 function ProductCard({ product }: { product: Product }) {
   return (
     <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-brand-earth-200">
@@ -20,10 +128,13 @@ function ProductCard({ product }: { product: Product }) {
           src={product.image_url}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          loading="lazy"
         />
-        <div className="absolute top-3 right-3 bg-brand-green-700 text-white text-xs font-bold px-3 py-1 rounded-full">
-          {product.price_label}
-        </div>
+        {product.price_label && (
+          <div className="absolute top-3 right-3 bg-brand-green-700 text-white text-xs font-bold px-3 py-1 rounded-full">
+            {product.price_label}
+          </div>
+        )}
       </div>
       <div className="p-5">
         <h4 className="font-bold text-brand-dark text-lg mb-2 group-hover:text-brand-green-700 transition-colors">
@@ -61,6 +172,8 @@ function ProductSubsection({
   const [showAll, setShowAll] = useState(false);
   const visible = showAll ? products : products.slice(0, initialShow);
 
+  if (products.length === 0) return null;
+
   return (
     <div className="mb-20 last:mb-0">
       <div className="flex items-center gap-3 mb-8">
@@ -73,7 +186,7 @@ function ProductSubsection({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {visible.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
@@ -93,7 +206,7 @@ function ProductSubsection({
             ) : (
               <>
                 <ChevronDown className="w-5 h-5" />
-                View More Products
+                View All Products
               </>
             )}
           </button>
@@ -104,23 +217,24 @@ function ProductSubsection({
 }
 
 export default function Products() {
-  const [waterTanks, setWaterTanks] = useState<Product[]>([]);
-  const [chainlink, setChainlink] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [dbWaterTanks, setDbWaterTanks] = useState<Product[]>([]);
+  const [dbChainlink, setDbChainlink] = useState<Product[]>([]);
   const sectionRef = useScrollReveal(0.1);
 
   useEffect(() => {
     async function fetchProducts() {
-      if (!supabase) { setLoading(false); return; }
+      if (!supabase) return;
       const { data } = await supabase.from('products').select('*').order('created_at');
       if (data) {
-        setWaterTanks(data.filter((p) => p.category === 'water_tanks'));
-        setChainlink(data.filter((p) => p.category === 'chainlink_fencing'));
+        setDbWaterTanks(data.filter((p) => p.category === 'water_tanks'));
+        setDbChainlink(data.filter((p) => p.category === 'chainlink_fencing'));
       }
-      setLoading(false);
     }
     fetchProducts();
   }, []);
+
+  const waterTanks = dbWaterTanks.length > 0 ? dbWaterTanks : STATIC_WATER_TANKS;
+  const chainlink = dbChainlink.length > 0 ? dbChainlink : STATIC_CHAINLINK;
 
   return (
     <section id="products" className="py-24 bg-white">
@@ -133,39 +247,22 @@ export default function Products() {
           </p>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="bg-brand-cream rounded-2xl overflow-hidden animate-pulse">
-                <div className="h-56 bg-brand-earth-200" />
-                <div className="p-5 space-y-3">
-                  <div className="h-5 bg-brand-earth-200 rounded w-3/4" />
-                  <div className="h-4 bg-brand-earth-200 rounded w-full" />
-                  <div className="h-10 bg-brand-earth-200 rounded-xl" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <>
-            <div className="reveal">
-              <ProductSubsection
-                title="Water Tanks"
-                icon={Droplets}
-                products={waterTanks}
-                initialShow={4}
-              />
-            </div>
-            <div className="reveal">
-              <ProductSubsection
-                title="Chainlink & Fencing Solutions"
-                icon={Fence}
-                products={chainlink}
-                initialShow={4}
-              />
-            </div>
-          </>
-        )}
+        <div className="reveal">
+          <ProductSubsection
+            title="Water Tanks"
+            icon={Droplets}
+            products={waterTanks}
+            initialShow={4}
+          />
+        </div>
+        <div className="reveal">
+          <ProductSubsection
+            title="Chainlink & Fencing Solutions"
+            icon={Fence}
+            products={chainlink}
+            initialShow={4}
+          />
+        </div>
       </div>
     </section>
   );

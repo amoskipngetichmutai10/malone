@@ -37,8 +37,8 @@ export default function Navbar() {
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isScrolled ? 'bg-brand-green-700 text-white' : 'bg-white/20 text-white backdrop-blur-sm'}`}>
               <Droplets className="w-6 h-6" />
             </div>
-            <span className={`font-bold text-xl hidden sm:block ${isScrolled ? 'text-brand-dark' : 'text-white'}`}>
-              Aqua<span className="text-brand-green-600">Secure</span>
+            <span className={`font-bold text-lg hidden sm:block tracking-tight ${isScrolled ? 'text-brand-dark' : 'text-white'}`}>
+              KENTAINERS <span className="text-brand-green-600">EAST AFRICA</span>
             </span>
           </a>
 

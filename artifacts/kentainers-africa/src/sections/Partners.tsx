@@ -1,26 +1,58 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Building2 } from 'lucide-react';
 
 interface Partner {
   id: string;
   name: string;
   logo_url: string | null;
+  website?: string;
+}
+
+const STATIC_PARTNERS: Partner[] = [
+  { id: 'p1', name: 'UNICEF Kenya', logo_url: 'https://logo.clearbit.com/unicef.org', website: 'https://www.unicef.org/kenya' },
+  { id: 'p2', name: 'World Vision', logo_url: 'https://logo.clearbit.com/worldvision.org', website: 'https://www.wvi.org' },
+  { id: 'p3', name: 'Kenya Red Cross', logo_url: 'https://logo.clearbit.com/kenyaredcross.org', website: 'https://www.kenyaredcross.org' },
+  { id: 'p4', name: 'Habitat for Humanity', logo_url: 'https://logo.clearbit.com/habitat.org', website: 'https://www.habitat.org' },
+  { id: 'p5', name: 'Oxfam', logo_url: 'https://logo.clearbit.com/oxfam.org', website: 'https://www.oxfam.org' },
+  { id: 'p6', name: 'USAID', logo_url: 'https://logo.clearbit.com/usaid.gov', website: 'https://www.usaid.gov' },
+  { id: 'p7', name: 'UN-Habitat', logo_url: 'https://logo.clearbit.com/unhabitat.org', website: 'https://unhabitat.org' },
+  { id: 'p8', name: 'Equity Bank', logo_url: 'https://logo.clearbit.com/equitybank.co.ke', website: 'https://equitybank.co.ke' },
+];
+
+function PartnerLogo({ partner }: { partner: Partner }) {
+  const [imgError, setImgError] = useState(false);
+
+  return (
+    <div className="flex-shrink-0 mx-4 w-52 h-20 bg-white rounded-xl border border-brand-earth-200 flex items-center justify-center gap-3 px-5 hover:border-brand-green-400 hover:shadow-md transition-all">
+      {!imgError && partner.logo_url ? (
+        <img
+          src={partner.logo_url}
+          alt={partner.name}
+          className="max-h-10 max-w-[120px] object-contain grayscale hover:grayscale-0 transition-all"
+          onError={() => setImgError(true)}
+        />
+      ) : null}
+      {(imgError || !partner.logo_url) && (
+        <span className="font-semibold text-brand-dark text-sm text-center leading-tight">{partner.name}</span>
+      )}
+    </div>
+  );
 }
 
 export default function Partners() {
-  const [partners, setPartners] = useState<Partner[]>([]);
+  const [dbPartners, setDbPartners] = useState<Partner[]>([]);
 
   useEffect(() => {
     async function fetchPartners() {
       if (!supabase) return;
       const { data } = await supabase.from('partners').select('*').order('created_at');
-      if (data) setPartners(data);
+      if (data) setDbPartners(data);
     }
     fetchPartners();
   }, []);
 
-  const tickerItems = partners.length > 0 ? [...partners, ...partners] : [];
+  const partners = dbPartners.length > 0 ? dbPartners : STATIC_PARTNERS;
+  const tickerItems = [...partners, ...partners];
 
   return (
     <section id="partners" className="py-20 bg-white overflow-hidden">
@@ -35,18 +67,12 @@ export default function Partners() {
       </div>
 
       <div className="relative w-full overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
         <div className="flex animate-ticker hover:[animation-play-state:paused]">
           {tickerItems.map((partner, i) => (
-            <div
-              key={`${partner.id}-${i}`}
-              className="flex-shrink-0 mx-4 w-64 h-24 bg-brand-cream rounded-xl border border-brand-earth-200 flex items-center justify-center gap-3 px-6 hover:border-brand-green-400 transition-colors"
-            >
-              <Building2 className="w-8 h-8 text-brand-green-600 shrink-0" />
-              <span className="font-semibold text-brand-dark text-sm">{partner.name}</span>
-            </div>
+            <PartnerLogo key={`${partner.id}-${i}`} partner={partner} />
           ))}
         </div>
       </div>
