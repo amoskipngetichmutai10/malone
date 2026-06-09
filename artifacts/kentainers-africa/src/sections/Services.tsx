@@ -26,6 +26,7 @@ export default function Services() {
 
   useEffect(() => {
     async function fetchServices() {
+      if (!supabase) { setLoading(false); return; }
       const { data } = await supabase.from('services').select('*').order('created_at');
       if (data) setServices(data);
       setLoading(false);

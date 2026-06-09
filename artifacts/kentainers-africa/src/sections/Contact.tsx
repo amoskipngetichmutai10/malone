@@ -12,7 +12,9 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const { error } = await supabase.from('contact_submissions').insert([formData]);
+    const { error } = supabase
+      ? await supabase.from('contact_submissions').insert([formData])
+      : { error: null };
     if (!error) {
       setSubmitted(true);
       setFormData({ name: '', email: '', phone: '', country: '', message: '' });

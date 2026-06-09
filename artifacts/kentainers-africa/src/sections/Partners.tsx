@@ -13,6 +13,7 @@ export default function Partners() {
 
   useEffect(() => {
     async function fetchPartners() {
+      if (!supabase) return;
       const { data } = await supabase.from('partners').select('*').order('created_at');
       if (data) setPartners(data);
     }

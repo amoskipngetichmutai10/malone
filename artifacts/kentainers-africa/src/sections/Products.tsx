@@ -111,6 +111,7 @@ export default function Products() {
 
   useEffect(() => {
     async function fetchProducts() {
+      if (!supabase) { setLoading(false); return; }
       const { data } = await supabase.from('products').select('*').order('created_at');
       if (data) {
         setWaterTanks(data.filter((p) => p.category === 'water_tanks'));

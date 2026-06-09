@@ -20,6 +20,7 @@ export default function Gallery() {
 
   useEffect(() => {
     async function fetchGallery() {
+      if (!supabase) return;
       const { data } = await supabase.from('gallery_items').select('*').order('created_at');
       if (data) setItems(data);
     }

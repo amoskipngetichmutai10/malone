@@ -18,6 +18,7 @@ export default function Projects() {
 
   useEffect(() => {
     async function fetchProjects() {
+      if (!supabase) { setLoading(false); return; }
       const { data } = await supabase.from('projects').select('*').order('created_at');
       if (data) setProjects(data);
       setLoading(false);

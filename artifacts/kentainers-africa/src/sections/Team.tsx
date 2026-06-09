@@ -18,6 +18,7 @@ export default function Team() {
 
   useEffect(() => {
     async function fetchTeam() {
+      if (!supabase) { setLoading(false); return; }
       const { data } = await supabase.from('team_members').select('*').order('created_at');
       if (data) setMembers(data);
       setLoading(false);

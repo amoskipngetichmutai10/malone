@@ -18,6 +18,7 @@ export default function Testimonials() {
 
   useEffect(() => {
     async function fetchTestimonials() {
+      if (!supabase) { setLoading(false); return; }
       const { data } = await supabase.from('testimonials').select('*').order('created_at');
       if (data) setTestimonials(data);
       setLoading(false);
